@@ -1,5 +1,9 @@
 {
   "name": "tind_tracking_api",
+  "scripts": {
+    "push": "bun drizzle-kit push",
+    "dev": "bun run --hot src/index.ts"
+  },
   "module": "index.ts",
   "type": "module",
   "private": true,
