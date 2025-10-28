@@ -3,25 +3,19 @@ import { sqliteTable, integer, text, real } from "drizzle-orm/sqlite-core";
 import { relations } from "drizzle-orm";
 
 // 1️⃣ transaction_person
-export const transactionPerson = sqliteTable("transaction_person", {
+export const transactionPersonTable = sqliteTable("transaction_person", {
     id: integer("id", { mode: "number" }).primaryKey(),
     name: text("name").notNull(),
 });
 
 // 2️⃣ wallets
-export const wallets = sqliteTable("wallets", {
-    id: integer("id", { mode: "number" }).primaryKey(),
-    name: text("name").notNull(),
-});
-
-// 3️⃣ transaction_types
-export const transactionTypes = sqliteTable("transaction_types", {
+export const walletsTable = sqliteTable("wallets", {
     id: integer("id", { mode: "number" }).primaryKey(),
     name: text("name").notNull(),
 });
 
 // 4️⃣ months
-export const months = sqliteTable("months", {
+export const monthsTable = sqliteTable("months", {
     id: integer("id", { mode: "number" }).primaryKey(),
     name: text("name").notNull(),
     startDate: text("start_date").notNull(),
@@ -29,20 +23,17 @@ export const months = sqliteTable("months", {
 });
 
 // 5️⃣ must_pay_transactions (planned / recurring obligations)
-export const mustPayTransactions = sqliteTable("must_pay_transactions", {
+export const mustPayTransactionsTable = sqliteTable("must_pay_transactions", {
     id: integer("id", { mode: "number" }).primaryKey(),
     transactionPersonId: integer("transaction_person_id")
         .notNull()
-        .references(() => transactionPerson.id),
+        .references(() => transactionPersonTable.id),
     walletId: integer("wallet_id")
         .notNull()
-        .references(() => wallets.id),
-    transactionTypeId: integer("transaction_type_id")
-        .notNull()
-        .references(() => transactionTypes.id),
+        .references(() => walletsTable.id),
     monthId: integer("month_id")
         .notNull()
-        .references(() => months.id),
+        .references(() => monthsTable.id),
     description: text("description"),
     amount: real("amount").notNull(),
     createdAt: text("created_at").default("CURRENT_TIMESTAMP"),
@@ -50,19 +41,16 @@ export const mustPayTransactions = sqliteTable("must_pay_transactions", {
 });
 
 // 6️⃣ transactions (actual payments)
-export const transactions = sqliteTable("transactions", {
+export const transactionsTable = sqliteTable("transactions", {
     id: integer("id", { mode: "number" }).primaryKey(),
     transactionPersonId: integer("transaction_person_id")
         .notNull()
-        .references(() => transactionPerson.id),
+        .references(() => transactionPersonTable.id),
     walletId: integer("wallet_id")
         .notNull()
-        .references(() => wallets.id),
-    transactionTypeId: integer("transaction_type_id")
-        .notNull()
-        .references(() => transactionTypes.id),
+        .references(() => walletsTable.id),
     mustPayTransactionId: integer("must_pay_transaction_id").references(
-        () => mustPayTransactions.id
+        () => mustPayTransactionsTable.id
     ),
     transactionDate: text("transaction_date").notNull(),
     description: text("description"),
