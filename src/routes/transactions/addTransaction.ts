@@ -21,10 +21,10 @@ export const addTransactionRoute = new Hono();
 addTransactionRoute.post("/", tbValidator('json', addTransactionSchema), async (c) => {
   try {
     const body = c.req.valid('json');
-    
-    // Handle date: if null or not provided, use today's date
-    const transactionDate: string = (body.date ?? new Date().toISOString().split('T')[0]) as string;
-    
+
+    // Handle date: if null or not provided, use today's date at UTC+7
+    const transactionDate: string = (body.date ?? new Date(new Date().getTime() + (7 * 60 * 60 * 1000)).toISOString().split('T')[0]) as string;
+
     // Find monthId using the utility
     const monthId = await getMonthId(transactionDate);
     if (monthId === -1) {
@@ -35,11 +35,11 @@ addTransactionRoute.post("/", tbValidator('json', addTransactionSchema), async (
       };
       return c.json(response, 404);
     }
-    
+
     let finalDescription: string | undefined = body.description;
     let finalAmount = body.amount;
     let finalMustPayTransactionId = body.mustPayTransactionId ?? null;
-    
+
     // Handle mustPayTransactionId if provided
     if (body.mustPayTransactionId && typeof body.mustPayTransactionId === 'number') {
       // Find the mustPayTransaction
@@ -48,7 +48,7 @@ addTransactionRoute.post("/", tbValidator('json', addTransactionSchema), async (
         .from(mustPayTransactionsTable)
         .where(eq(mustPayTransactionsTable.id, body.mustPayTransactionId))
         .limit(1);
-      
+
       if (mustPayTransactions.length === 0) {
         const response: GenericResponseInterface = {
           success: false,
@@ -57,7 +57,7 @@ addTransactionRoute.post("/", tbValidator('json', addTransactionSchema), async (
         };
         return c.json(response, 404);
       }
-      
+
       const mustPayTransaction = mustPayTransactions[0];
       if (!mustPayTransaction) {
         const response: GenericResponseInterface = {
@@ -67,10 +67,10 @@ addTransactionRoute.post("/", tbValidator('json', addTransactionSchema), async (
         };
         return c.json(response, 404);
       }
-      
+
       // Use mustPayTransaction description
       finalDescription = mustPayTransaction.description ?? undefined;
-      
+
       // Update mustPayTransaction amount based on comparison
       if (mustPayTransaction.amount <= body.amount) {
         // Set mustPayTransaction amount to 0
@@ -87,7 +87,7 @@ addTransactionRoute.post("/", tbValidator('json', addTransactionSchema), async (
           .where(eq(mustPayTransactionsTable.id, body.mustPayTransactionId));
       }
     }
-    
+
     // Insert the transaction
     const result = await db
       .insert(transactionsTable)
@@ -100,14 +100,14 @@ addTransactionRoute.post("/", tbValidator('json', addTransactionSchema), async (
         amount: finalAmount
       })
       .returning();
-    
+
     const response: GenericResponseInterface = {
       success: true,
       message: "Transaction added successfully",
       data: result[0]
     };
     return c.json(response, 201);
-    
+
   } catch (error) {
     console.error('Error adding transaction:', error);
     const response: GenericResponseInterface = {

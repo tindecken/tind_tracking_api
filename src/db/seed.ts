@@ -19,7 +19,7 @@ export async function seed() {
 
     // Insert sample data into the transaction_person table
     await db.insert(transactionPersonTable).values([
-      { id: 1, name: "H" },
+      { id: 1, name: "Me" },
       { id: 2, name: "Nhi" },
     ]);
     // Insert sample data into the wallets table
@@ -131,35 +131,35 @@ export async function seed() {
         walletId: 1,
         date: '2025-10-28',
         mustPayTransactionId: null,
-        description: 'an sang',
-        amount: 40,
+        description: 'lương',
+        amount: -52351,
       },
       {
         id: 2,
         transactionPersonId: 1,
-        walletId: 1,
+        walletId: 2,
         date: '2025-10-28',
         mustPayTransactionId: null,
-        description: 'an trua',
-        amount: 50,
+        description: 'ví',
+        amount: -616,
       },
       {
         id: 3,
-        transactionPersonId: 1,
+        transactionPersonId: 2,
         walletId: 1,
         date: '2025-10-29',
         mustPayTransactionId: null,
-        description: 'cf',
-        amount: 29,
+        description: 'chuyen',
+        amount: 20000,
       },
       {
         id: 4,
         transactionPersonId: 1,
-        walletId: 2,
-        date: '2025-10-29',
-        mustPayTransactionId: 8,
-        description: 'xe',
-        amount: 50,
+        walletId: 1,
+        date: '2025-10-28',
+        mustPayTransactionId: null,
+        description: 'cơm trưa',
+        amount: 48,
       },
       {
         id: 5,
@@ -167,18 +167,9 @@ export async function seed() {
         walletId: 1,
         date: '2025-10-28',
         mustPayTransactionId: null,
-        description: 'luong',
-        amount: 32000,
-      },
-      {
-        id: 6,
-        transactionPersonId: 2,
-        walletId: 1,
-        date: '2025-10-28',
-        mustPayTransactionId: null,
-        description: 'chuyen Nhi',
-        amount: 5000,
-      },
+        description: 'hạt bí',
+        amount: 86,
+      }
     ]);
     return { success: true, message: "Database seeded successfully." };
   } catch (error) {
