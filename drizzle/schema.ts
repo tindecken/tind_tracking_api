@@ -53,7 +53,7 @@ export const transactionsTable = sqliteTable("transactions", {
         .notNull()
         .references(() => walletsTable.id),
     mustPayTransactionId: integer("must_pay_transaction_id"),
-    transactionDate: text("transaction_date").notNull(),
+    date: text("date").notNull(),
     description: text("description"),
     amount: real("amount").notNull(),
     createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`),

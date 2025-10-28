@@ -16,6 +16,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@hono/typebox-validator": "^1.1.0",
     "@libsql/client": "^0.15.15",
     "drizzle-orm": "^0.44.7",
     "hono": "^4.10.3"
