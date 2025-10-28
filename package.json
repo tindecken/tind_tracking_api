@@ -2,6 +2,7 @@
   "name": "tind_tracking_api",
   "scripts": {
     "push": "bun drizzle-kit push",
+    "seed": "bun run src/db/seed.ts",
     "dev": "bun run --hot src/index.ts"
   },
   "module": "index.ts",

@@ -11,27 +11,21 @@ import { sql } from "bun";
 // Seed function to populate the database with sample data
 export async function seed() {
   try {
-
     await db.delete(monthsTable);
-
     await db.delete(mustPayTransactionsTable);
-    
     await db.delete(walletsTable);
-    
-    
     await db.delete(transactionPersonTable);
-    
     await db.delete(transactionsTable);
 
     // Insert sample data into the transaction_person table
     await db.insert(transactionPersonTable).values([
-      { id: 1, name: "Me" },
+      { id: 1, name: "H" },
       { id: 2, name: "Nhi" },
     ]);
     // Insert sample data into the wallets table
     await db.insert(walletsTable).values([
-      { id: 1, name: "Cash" },
-      { id: 2, name: "Bank" },
+      { id: 1, name: "Bank" },
+      { id: 2, name: "Cash" },
     ]);
     // Insert sample data into the months table
     await db.insert(monthsTable).values([
@@ -45,10 +39,147 @@ export async function seed() {
     // Insert sample data into mustPayTransactions
     await db.insert(mustPayTransactionsTable).values([
       {
-        
+        id: 1,
+        transactionPersonId: 2,
+        monthId: 1,
+        description: 'Nhi',
+        amount: 48000,
+      },
+      {
+        id: 2,
+        transactionPersonId: 2,
+        monthId: 1,
+        description: 't9',
+        amount: -6500,
+      },
+      {
+        id: 3,
+        transactionPersonId: 1,
+        monthId: 1,
+        description: 'x',
+        amount: 670,
+      },
+      {
+        id: 4,
+        transactionPersonId: 1,
+        monthId: 1,
+        description: 'x2',
+        amount: 800,
+      },
+      {
+        id: 5,
+        transactionPersonId: 1,
+        monthId: 1,
+        description: 'toc',
+        amount: 150,
+      },
+      {
+        id: 6,
+        transactionPersonId: 1,
+        monthId: 1,
+        description: 'nhot',
+        amount: 150,
+      },
+      {
+        id: 7,
+        transactionPersonId: 1,
+        monthId: 1,
+        description: 'dt+4g',
+        amount: 100,
+      },
+      {
+        id: 8,
+        transactionPersonId: 1,
+        monthId: 1,
+        description: 'xe',
+        amount: 50,
+      },
+      {
+        id: 9,
+        transactionPersonId: 1,
+        monthId: 1,
+        description: 'hsbc',
+        amount: -800,
+      },
+      {
+        id: 10,
+        transactionPersonId: 1,
+        monthId: 1,
+        description: 'n1',
+        amount: 500,
+      },
+      {
+        id: 11,
+        transactionPersonId: 1,
+        monthId: 1,
+        description: 'n2',
+        amount: 500,
+      },
+      {
+        id: 12,
+        transactionPersonId: 1,
+        monthId: 1,
+        description: 'y',
+        amount: 1000,
       }
-    ])
-    
+    ]);
+    // Insert sample data into transactions table
+    await db.insert(transactionsTable).values([
+      {
+        id: 1,
+        transactionPersonId: 1,
+        walletId: 1,
+        transactionDate: '2025-10-28',
+        mustPayTransactionId: null,
+        description: 'an sang',
+        amount: 40,
+      },
+      {
+        id: 2,
+        transactionPersonId: 1,
+        walletId: 1,
+        transactionDate: '2025-10-28',
+        mustPayTransactionId: null,
+        description: 'an trua',
+        amount: 50,
+      },
+      {
+        id: 3,
+        transactionPersonId: 1,
+        walletId: 1,
+        transactionDate: '2025-10-29',
+        mustPayTransactionId: null,
+        description: 'cf',
+        amount: 29,
+      },
+      {
+        id: 4,
+        transactionPersonId: 1,
+        walletId: 2,
+        transactionDate: '2025-10-29',
+        mustPayTransactionId: 8,
+        description: 'xe',
+        amount: 50,
+      },
+      {
+        id: 5,
+        transactionPersonId: 1,
+        walletId: 1,
+        transactionDate: '2025-10-28',
+        mustPayTransactionId: null,
+        description: 'luong',
+        amount: 32000,
+      },
+      {
+        id: 6,
+        transactionPersonId: 2,
+        walletId: 1,
+        transactionDate: '2025-10-28',
+        mustPayTransactionId: null,
+        description: 'chuyen Nhi',
+        amount: 5000,
+      },
+    ]);
     return { success: true, message: "Database seeded successfully." };
   } catch (error) {
     console.error("Error seeding database:", error);
