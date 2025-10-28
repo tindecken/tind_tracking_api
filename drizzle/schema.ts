@@ -1,5 +1,5 @@
 // drizzle/schema.ts
-import { sqliteTable, integer, text, real } from "drizzle-orm/sqlite-core";
+import { sqliteTable, integer, text, real, sqliteView } from "drizzle-orm/sqlite-core";
 import { relations, sql } from "drizzle-orm";
 
 // 1️⃣ transaction_person
@@ -58,4 +58,44 @@ export const transactionsTable = sqliteTable("transactions", {
     amount: real("amount").notNull(),
     createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`),
     updatedAt: text("updated_at").$onUpdate(() => sql`(CURRENT_TIMESTAMP)`)
+});
+
+// 7️⃣ vNhi view - calculates total and remaining amounts for Nhi
+export const vNhiView = sqliteView("v_nhi").as((qb) => {
+    return qb
+        .select({
+            totalAmount: sql<number>`
+                COALESCE(
+                    (SELECT SUM(mpt.amount)
+                     FROM must_pay_transactions mpt
+                     INNER JOIN transaction_person tp ON mpt.transaction_person_id = tp.id
+                     INNER JOIN months m ON mpt.month_id = m.id
+                     WHERE tp.name = 'Nhi'
+                       AND date('now') BETWEEN date(m.start_date) AND date(m.end_date)
+                    ), 0
+                )
+            `.as('totalAmount'),
+            remainingAmount: sql<number>`
+                COALESCE(
+                    (SELECT SUM(mpt.amount)
+                     FROM must_pay_transactions mpt
+                     INNER JOIN transaction_person tp ON mpt.transaction_person_id = tp.id
+                     INNER JOIN months m ON mpt.month_id = m.id
+                     WHERE tp.name = 'Nhi'
+                       AND date('now') BETWEEN date(m.start_date) AND date(m.end_date)
+                    ), 0
+                ) - COALESCE(
+                    (SELECT SUM(t.amount)
+                     FROM transactions t
+                     INNER JOIN transaction_person tp ON t.transaction_person_id = tp.id
+                     INNER JOIN months m ON date(t.date) BETWEEN date(m.start_date) AND date(m.end_date)
+                     WHERE tp.name = 'Nhi'
+                       AND date('now') BETWEEN date(m.start_date) AND date(m.end_date)
+                    ), 0
+                )
+            `.as('remainingAmount')
+        })
+        .from(transactionPersonTable)
+        .where(sql`${transactionPersonTable.name} = 'Nhi'`)
+        .limit(1);
 });
