@@ -2,12 +2,12 @@ import { Hono } from "hono";
 import { getMonthId } from '../../utils/getMonthId';
 import type { GenericResponseInterface } from "../../models/GenericResponseInterface";
 import { db } from "../../db/index";
-import { mustPayTransactionsTable, monthsTable, transactionsTable, transactionPersonTable } from "../../../drizzle/schema";
+import { mustPayTransactionsTable, monthsTable, transactionsTable, transactionPersonTable, walletsTable } from "../../../drizzle/schema";
 import { eq, sum, sql, and } from "drizzle-orm";
 
 export const getPerday = new Hono();
 
-getPerday.get("/perDay", async (c) => {
+getPerday.get("/summary", async (c) => {
   try {
     // Set date = today in UTC+7 timezone
     const today: string = new Date(new Date().getTime() + (7 * 60 * 60 * 1000)).toISOString().split('T')[0]!; // YYYY-MM-DD format in UTC+7
@@ -90,6 +90,37 @@ getPerday.get("/perDay", async (c) => {
     const totalAmount = Number(transactionsResult[0]?.totalAmount || 0);
     console.log("totalAmount", totalAmount);
 
+    // Get cashAmount & bankAmount
+    const cashWallet = await db.select().from(walletsTable).where(eq(walletsTable.name, 'Cash')).limit(1);
+    const bankWallet = await db.select().from(walletsTable).where(eq(walletsTable.name, 'Bank')).limit(1);
+    const cashTransaction = await db
+      .select({
+        cashAmount: sum(transactionsTable.amount)
+      })
+      .from(transactionsTable)
+      .where(
+        and(
+          sql`date(${transactionsTable.date}) BETWEEN date(${month.startDate}) AND date(${month.endDate})`,
+          eq(transactionsTable.walletId, cashWallet[0]!.id),
+          // eq(transactionsTable.transactionPersonId, myTransactionPerson[0]!.id)
+        )
+      );
+    const cashAmountRemaining = Math.abs(Number(cashTransaction[0]?.cashAmount || 0));
+
+    const bankTransaction = await db
+      .select({
+        bankAmount: sum(transactionsTable.amount)
+      })
+      .from(transactionsTable)
+      .where(
+        and(
+          sql`date(${transactionsTable.date}) BETWEEN date(${month.startDate}) AND date(${month.endDate})`,
+          eq(transactionsTable.walletId, bankWallet[0]!.id),
+          // eq(transactionsTable.transactionPersonId, myTransactionPerson[0]!.id)
+        )
+      );
+    const bankAmountRemaining = Math.abs(Number(bankTransaction[0]?.bankAmount || 0));
+
     // Query mustPayTransactions table with month_id = monthId
     const mustPayResult = await db
       .select({
@@ -109,13 +140,14 @@ getPerday.get("/perDay", async (c) => {
 
     const response: GenericResponseInterface = {
       success: true,
-      message: "Per day calculation retrieved successfully",
+      message: "Summary calculation retrieved successfully",
       data: {
         totalAmount,
         mustPayTotalAmount,
-        perDayAmount,
         dayLeft,
-        remainingAmount
+        perDayAmount,
+        bankAmountRemaining,
+        cashAmountRemaining,
       }
     };
 
