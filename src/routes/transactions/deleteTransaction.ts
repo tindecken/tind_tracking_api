@@ -20,10 +20,10 @@ deleteTransactionRoute.delete("/:id", tbValidator('param', idParamSchema), async
     const { id } = c.req.valid('param');
     const transactionId = parseInt(id);
 
-    if (isNaN(transactionId)) {
+    if (isNaN(transactionId) || transactionId <= 0 || !Number.isInteger(transactionId)) {
       const response: GenericResponseInterface = {
         success: false,
-        message: "Invalid transaction ID",
+        message: "Invalid transaction ID - must be a positive integer",
         data: null
       };
       return c.json(response, 400);

@@ -5,9 +5,9 @@ import { db } from "../../db/index";
 import { mustPayTransactionsTable, monthsTable, transactionsTable, transactionPersonTable, walletsTable } from "../../../drizzle/schema";
 import { eq, sum, sql, and } from "drizzle-orm";
 
-export const getPerday = new Hono();
+export const getSummary = new Hono();
 
-getPerday.get("/summary", async (c) => {
+getSummary.get("/summary", async (c) => {
   try {
     // Set date = today in UTC+7 timezone
     const today: string = new Date(new Date().getTime() + (7 * 60 * 60 * 1000)).toISOString().split('T')[0]!; // YYYY-MM-DD format in UTC+7
