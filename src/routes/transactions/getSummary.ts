@@ -105,7 +105,7 @@ getPerday.get("/summary", async (c) => {
           // eq(transactionsTable.transactionPersonId, myTransactionPerson[0]!.id)
         )
       );
-    const cashAmountRemaining = Math.abs(Number(cashTransaction[0]?.cashAmount || 0));
+    const cashRemaining = Math.abs(Number(cashTransaction[0]?.cashAmount || 0));
 
     const bankTransaction = await db
       .select({
@@ -119,7 +119,7 @@ getPerday.get("/summary", async (c) => {
           // eq(transactionsTable.transactionPersonId, myTransactionPerson[0]!.id)
         )
       );
-    const bankAmountRemaining = Math.abs(Number(bankTransaction[0]?.bankAmount || 0));
+    const bankRemaining = Math.abs(Number(bankTransaction[0]?.bankAmount || 0));
 
     // Query mustPayTransactions table with month_id = monthId
     const mustPayResult = await db
@@ -135,19 +135,18 @@ getPerday.get("/summary", async (c) => {
     // Set remainingAmount = abs(totalAmount + mustPayTotalAmount)
     const remainingAmount = Math.abs(totalAmount + mustPayTotalAmount);
 
-    // Calculate perDayAmount = remainingAmount - (200 * dayLeft), then floor to remove decimals
-    const perDayAmount = Math.floor(remainingAmount - (200 * dayLeft));
+    // Calculate perDayAmount = remainingAmount - (200 * (dayLeft-1)), then floor to remove decimals
+    const perDayAmount = Math.floor(remainingAmount - (200 * (dayLeft-1)));
 
     const response: GenericResponseInterface = {
       success: true,
       message: "Summary calculation retrieved successfully",
       data: {
-        totalAmount,
-        mustPayTotalAmount,
+        totalAmount: Math.abs(totalAmount),
         dayLeft,
         perDayAmount,
-        bankAmountRemaining,
-        cashAmountRemaining,
+        bankRemaining,
+        cashRemaining,
       }
     };
 
