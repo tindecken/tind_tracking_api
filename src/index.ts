@@ -14,6 +14,7 @@ import { deleteTransactionRoute } from "./routes/transactions/deleteTransaction"
 import { updateTransactionRoute } from "./routes/transactions/updateTransaction";
 import { getTransactionsRoute } from "./routes/transactions/getTransactions";
 import { getNhiSummary } from "./routes/transactions/getNhiSummary";
+import { reconcilliationTransactionRoute } from "./routes/transactions/reconcilliationTransaction";
 
 const app = new Hono();
 
@@ -24,6 +25,7 @@ app.route("/transactions", getSummary);
 app.route("/transactions", getNhiSummary);
 app.route("/transactions", deleteTransactionRoute);
 app.route("/transactions", updateTransactionRoute);
+app.route("/transactions", reconcilliationTransactionRoute);
 app.route("/months", getMonthIdRoute);
 app.route("/months", addMonthRoute);
 app.route("/months", deleteMonthRoute);
