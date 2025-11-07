@@ -42,7 +42,7 @@ reconcilliationTransactionRoute.post("/reconcilliation", tbValidator('json', rec
     if (!monthRecord[0]) {
       const response: GenericResponseInterface = {
         success: false,
-        message: "Month record not found !!",
+        message: "Month record not found !",
         data: null
       };
       return c.json(response, 404);
