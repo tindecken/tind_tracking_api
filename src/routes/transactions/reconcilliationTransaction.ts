@@ -26,7 +26,7 @@ reconcilliationTransactionRoute.post("/reconcilliation", tbValidator('json', rec
     if (monthId === -1) {
       const response: GenericResponseInterface = {
         success: false,
-        message: "Month not found..",
+        message: "Month not found...",
         data: null
       };
       return c.json(response, 404);
