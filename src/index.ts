@@ -3,7 +3,6 @@ import { addTransactionRoute } from "./routes/transactions/addTransaction";
 import { getMonthIdRoute } from "./routes/months/getMonthId";
 import { getMustPayTransactionsRoute } from "./routes/mustPayTransactions/getMustPayTransactions";
 import { getSummary } from "./routes/transactions/getSummary";
-import { env } from "./env";
 import { addMustPayTransactionsRoute } from "./routes/mustPayTransactions/addMustPayTransaction";
 import { updateMustPayTransactionsRoute } from "./routes/mustPayTransactions/updateMustPayTransaction";
 import { deleteMustPayTransactionsRoute } from "./routes/mustPayTransactions/deleteMustPayTransaction";
@@ -36,6 +35,6 @@ app.route("/mustPayTransactions", updateMustPayTransactionsRoute);
 app.route("/mustPayTransactions", deleteMustPayTransactionsRoute);
 
 export default {
-  port: env.PORT,
+  port: process.env.PORT,
   fetch: app.fetch,
 };
