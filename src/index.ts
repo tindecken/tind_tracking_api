@@ -37,6 +37,7 @@ app.route("/mustPayTransactions", deleteMustPayTransactionsRoute);
 console.log('process.env.PORTTTTTTTTT:', process.env.PORT);
 
 export default {
+  host: "0.0.0.0",
   port: Number(process.env.PORT),
   fetch: app.fetch,
 };
