@@ -3,7 +3,8 @@
   "scripts": {
     "push": "bun drizzle-kit push",
     "seed": "bun run src/db/seed.ts",
-    "dev": "bun run --hot src/index.ts"
+    "dev": "bun run --hot src/index.ts",
+    "prod": "bun run src/index.ts --env-file=.env.production"
   },
   "module": "index.ts",
   "type": "module",
