@@ -34,7 +34,9 @@ app.route("/mustPayTransactions", addMustPayTransactionsRoute);
 app.route("/mustPayTransactions", updateMustPayTransactionsRoute);
 app.route("/mustPayTransactions", deleteMustPayTransactionsRoute);
 
+console.log('process.env.PORTTTTTTTTT:', process.env.PORT);
+
 export default {
-  port: process.env.PORT,
+  port: Number(process.env.PORT),
   fetch: app.fetch,
 };
