@@ -4,7 +4,7 @@ module.exports = {
       app: "tind_tracking_api",
       name: 'tind_tracking_api',
       script: 'src/index.ts',
-      interpreter: 'bun',
+      interpreter: '/root/.bun/bin/bun',
       interpreter_args: 'run',
       instances: 1,
       exec_mode: 'fork',
