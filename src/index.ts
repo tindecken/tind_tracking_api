@@ -34,10 +34,18 @@ app.route("/mustPayTransactions", addMustPayTransactionsRoute);
 app.route("/mustPayTransactions", updateMustPayTransactionsRoute);
 app.route("/mustPayTransactions", deleteMustPayTransactionsRoute);
 
-console.log('process.env.PORTTTTTTTTT:', process.env.PORT);
+const port = Number(process.env.PORT!);
 
+// Start server explicitly for production (PM2)
+const server = Bun.serve({
+  port: port,
+  fetch: app.fetch,
+});
+
+console.log(`🚀 Server running on port ${server.port}`);
+
+// Also export for development mode
 export default {
-  host: "0.0.0.0",
-  port: Number(process.env.PORT),
+  port: port,
   fetch: app.fetch,
 };
