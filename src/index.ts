@@ -18,6 +18,22 @@ import { reconcilliationTransactionRoute } from "./routes/transactions/reconcill
 const app = new Hono();
 
 app.get("/", (c) => c.text("✅ Tind Tracking API works"));
+app.get("/api1", async (c) => {
+  await new Promise((resolve) => setTimeout(resolve, 100));
+  return c.text("API 1 worked");
+});
+app.get("/api2", async (c) => {
+  await new Promise((resolve) => setTimeout(resolve, 200));
+  return c.text("API 2 worked");
+});
+app.get("/api3", async (c) => {
+  await new Promise((resolve) => setTimeout(resolve, 300));
+  return c.text("API 3 worked");
+});
+app.get("/api4", async (c) => {
+  await new Promise((resolve) => setTimeout(resolve, 400));
+  return c.text("API 4 worked");
+});
 app.route("/transactions", addTransactionRoute);
 app.route("/transactions", getTransactionsRoute);
 app.route("/transactions", getSummary);
