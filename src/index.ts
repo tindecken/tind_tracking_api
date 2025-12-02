@@ -14,6 +14,12 @@ import { updateTransactionRoute } from "./routes/transactions/updateTransaction"
 import { getTransactionsRoute } from "./routes/transactions/getTransactions";
 import { getNhiSummary } from "./routes/transactions/getNhiSummary";
 import { reconcilliationTransactionRoute } from "./routes/transactions/reconcilliationTransaction";
+import { last5Transactions } from "./routes/spreadsheet/last5Transactions";
+import { lastTransaction } from "./routes/spreadsheet/lastTransaction";
+import { nhiRemaining } from "./routes/spreadsheet/nhiRemaining";
+import { addTransaction } from "./routes/spreadsheet/addTransaction";
+import { perDay } from "./routes/spreadsheet/perDay";
+import { undoTransaction } from "./routes/spreadsheet/undoTransaction";
 
 const app = new Hono();
 
@@ -33,6 +39,13 @@ app.route("/mustPayTransactions", getMustPayTransactionsRoute);
 app.route("/mustPayTransactions", addMustPayTransactionsRoute);
 app.route("/mustPayTransactions", updateMustPayTransactionsRoute);
 app.route("/mustPayTransactions", deleteMustPayTransactionsRoute);
+app.route("/spreadsheet", addTransaction);
+app.route("/spreadsheet", last5Transactions);
+app.route("/spreadsheet", lastTransaction);
+app.route("/spreadsheet", nhiRemaining);
+app.route("/spreadsheet", perDay);
+app.route("/spreadsheet", undoTransaction);
+
 
 const port = Number(process.env.PORT!);
 

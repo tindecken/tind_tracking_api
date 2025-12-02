@@ -4,7 +4,15 @@
     "push": "bun drizzle-kit push",
     "seed": "bun run src/db/seed.ts",
     "dev": "bun run --hot src/index.ts",
-    "prod": "bun run src/index.ts --env-file=.env.production"
+    "prod": "bun run src/index.ts --env-file=.env.production",
+    "pm2:start": "pm2 start ecosystem.config.cjs --env production",
+    "pm2:stop": "pm2 stop tind-tracking-api",
+    "pm2:restart": "pm2 restart tind-tracking-api",
+    "pm2:reload": "pm2 reload tind-tracking-api",
+    "pm2:delete": "pm2 delete tind-tracking-api",
+    "pm2:logs": "pm2 logs tind-tracking-api",
+    "pm2:monit": "pm2 monit",
+    "pm2:status": "pm2 status"
   },
   "module": "index.ts",
   "type": "module",
@@ -20,6 +28,7 @@
     "@hono/typebox-validator": "^1.1.0",
     "@libsql/client": "^0.15.15",
     "drizzle-orm": "^0.44.7",
+    "googleapis": "^166.0.0",
     "hono": "^4.10.3"
   }
 }
