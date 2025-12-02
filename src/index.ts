@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { cors } from "hono/cors";
 import { addTransactionRoute } from "./routes/transactions/addTransaction";
 import { getMonthIdRoute } from "./routes/months/getMonthId";
 import { getMustPayTransactionsRoute } from "./routes/mustPayTransactions/getMustPayTransactions";
@@ -23,23 +24,16 @@ import { undoTransaction } from "./routes/spreadsheet/undoTransaction";
 
 const app = new Hono();
 
+app.use("*", async (c, next) => {}, cors({
+  origin: ['http://tindecken.xyz', 'https://tindecken.xyz', 'http://localhost', 'https://localhost:1000', 'http://localhost:1000', 'http://localhost:3001', 'https://paperwork.tindecken.xyz', 'https://paperworkapi.tindecken.xyz', 'https://192.168.1.99:9090', 'http://192.168.1.99:9090', 'capacitor://192.168.1.99:9090', 'capacitor://192.168.1.99', 'https://192.168.1.3:9090', 'https://192.168.1.3:1000', 'https://10.10.0.27:1000', 'https://10.10.0.27:3001', 'http://localhost:9000'],
+	allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+	allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
+	credentials: true,
+	exposeHeaders: ['Content-Length', 'X-Kuma-Revision', 'X-Retry-After'],
+	maxAge: 10 * 60
+}))
+
 app.get("/", (c) => c.text("✅ Tind Tracking API works"));
-app.get("/api1", async (c) => {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  return c.text("API 1 worked");
-});
-app.get("/api2", async (c) => {
-  await new Promise((resolve) => setTimeout(resolve, 2000));
-  return c.text("API 2 worked");
-});
-app.get("/api3", async (c) => {
-  await new Promise((resolve) => setTimeout(resolve, 3000));
-  return c.text("API 3 worked");
-});
-app.get("/api4", async (c) => {
-  await new Promise((resolve) => setTimeout(resolve, 4000));
-  return c.text("API 4 worked");
-});
 app.route("/transactions", addTransactionRoute);
 app.route("/transactions", getTransactionsRoute);
 app.route("/transactions", getSummary);
