@@ -21,6 +21,7 @@ import { nhiRemaining } from "./routes/spreadsheet/nhiRemaining";
 import { addTransaction } from "./routes/spreadsheet/addTransaction";
 import { perDay } from "./routes/spreadsheet/perDay";
 import { undoTransaction } from "./routes/spreadsheet/undoTransaction";
+import { getMustPay } from "./routes/spreadsheet/getMustPay";
 
 const app = new Hono();
 
@@ -55,6 +56,7 @@ app.route("/spreadsheet", lastTransaction);
 app.route("/spreadsheet", nhiRemaining);
 app.route("/spreadsheet", perDay);
 app.route("/spreadsheet", undoTransaction);
+app.route("/spreadsheet", getMustPay);
 
 
 const port = Number(process.env.PORT!);
