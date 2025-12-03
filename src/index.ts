@@ -22,6 +22,7 @@ import { addTransaction } from "./routes/spreadsheet/addTransaction";
 import { perDay } from "./routes/spreadsheet/perDay";
 import { undoTransaction } from "./routes/spreadsheet/undoTransaction";
 import { getMustPay } from "./routes/spreadsheet/getMustPay";
+import { getHoangRemaining } from "./routes/spreadsheet/getHoangRemaining";
 
 const app = new Hono();
 
@@ -54,6 +55,7 @@ app.route("/spreadsheet", addTransaction);
 app.route("/spreadsheet", last5Transactions);
 app.route("/spreadsheet", lastTransaction);
 app.route("/spreadsheet", nhiRemaining);
+app.route("/spreadsheet", getHoangRemaining);
 app.route("/spreadsheet", perDay);
 app.route("/spreadsheet", undoTransaction);
 app.route("/spreadsheet", getMustPay);
