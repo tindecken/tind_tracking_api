@@ -4,13 +4,13 @@ import getAuthenticatedSheets from '../../utils/getAuthenticatedSheets';
 import getPerDay from '../../utils/getPerDay';
 import type { GenericResponseInterface } from '../../models/GenericResponseInterface';
 
-export const last5Transactions = new Hono();
+export const getAllTransactions = new Hono();
 
 // ID of your target spreadsheet (the long ID from the URL)
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
 const transactionSheet = "T"
 
-last5Transactions.get('/last5Transactions', async (c) => {
+getAllTransactions.get('/allTransactions', async (c) => {
   try {
     // Get authenticated sheets instance
     const sheets = await getAuthenticatedSheets();
@@ -59,30 +59,32 @@ last5Transactions.get('/last5Transactions', async (c) => {
     // Get per day value
     const perDay = await getPerDay();
 
-    // Get the last 5 transactions (or fewer if less than 5 exist)
-    const last5Rows = transactionRows.slice(-5).reverse();
-    const transactions = last5Rows.map(rowIndex => {
-      const row = rows[rowIndex];
-      if (!row) {
-        const response: GenericResponseInterface = {
-          success: false,
-          message: 'Transaction data is invalid',
-          data: null,
+    // Get all transactions in reverse order (most recent first)
+    const allRows = transactionRows.slice().reverse();
+    const transactions = allRows
+      .map(rowIndex => {
+        const row = rows[rowIndex];
+        if (!row) {
+          return null;
+        }
+        const dateValue = row[colIndex];
+        // Check if date is a number
+        if (dateValue === null || dateValue === undefined || isNaN(Number(dateValue))) {
+          return null;
+        }
+        return {
+          date: dateValue,
+          note: row[colIndex + 1] || '',
+          price: row[colIndex + 2] || 0,
+          isCashed: row[colIndex + 3] === 'x',
+          perDay
         };
-        return c.json(response, 500);
-      }
-      return {
-        date: row[colIndex] || '',
-        note: row[colIndex + 1] || '',
-        price: row[colIndex + 2] || 0,
-        isCashed: row[colIndex + 3] === 'x',
-        perDay
-      };
-    });
+      })
+      .filter(transaction => transaction !== null);
 
     const res: GenericResponseInterface = {
       success: true,
-      message: 'Last 5 transactions retrieved successfully',
+      message: 'All transactions retrieved successfully',
       data: transactions,
     };
     return c.json(res, 200);
@@ -90,8 +92,8 @@ last5Transactions.get('/last5Transactions', async (c) => {
     const response: GenericResponseInterface = {
       success: false,
       message: error
-        ? `Error while retrieving last 5 transactions: ${error}${error.code ? ` - ${error.code}` : ""}`
-        : "Error while retrieving last 5 transactions",
+        ? `Error while retrieving all transactions: ${error}${error.code ? ` - ${error.code}` : ""}`
+        : "Error while retrieving all transactions",
       data: null,
     };
     return c.json(response, 500);

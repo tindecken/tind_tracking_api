@@ -15,7 +15,7 @@ import { updateTransactionRoute } from "./routes/transactions/updateTransaction"
 import { getTransactionsRoute } from "./routes/transactions/getTransactions";
 import { getNhiSummary } from "./routes/transactions/getNhiSummary";
 import { reconcilliationTransactionRoute } from "./routes/transactions/reconcilliationTransaction";
-import { last5Transactions } from "./routes/spreadsheet/last5Transactions";
+import { getAllTransactions, last5Transactions } from "./routes/spreadsheet/getAllTransactions";
 import { lastTransaction } from "./routes/spreadsheet/lastTransaction";
 import { nhiRemaining } from "./routes/spreadsheet/nhiRemaining";
 import { addTransaction } from "./routes/spreadsheet/addTransaction";
@@ -52,7 +52,7 @@ app.route("/mustPayTransactions", addMustPayTransactionsRoute);
 app.route("/mustPayTransactions", updateMustPayTransactionsRoute);
 app.route("/mustPayTransactions", deleteMustPayTransactionsRoute);
 app.route("/spreadsheet", addTransaction);
-app.route("/spreadsheet", last5Transactions);
+app.route("/spreadsheet", getAllTransactions);
 app.route("/spreadsheet", lastTransaction);
 app.route("/spreadsheet", nhiRemaining);
 app.route("/spreadsheet", getHoangRemaining);

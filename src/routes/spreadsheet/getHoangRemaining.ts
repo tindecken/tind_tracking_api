@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import type { GenericResponseInterface } from '../../models/GenericResponseInterface';
 import getAuthenticatedSheets from "../../utils/getAuthenticatedSheets";
 import getFirstSheet from "../../utils/getFirstSheet";
+import getValueByName from "../../utils/getValueByName";
 
 export const getHoangRemaining = new Hono();
 
@@ -11,11 +12,14 @@ getHoangRemaining.get('/hoangRemaining', async (c) => {
   try {
     let atm = 0
     let cash = 0
+    let dayLeft = 0
     // Get authenticated sheets instance
     const sheets = await getAuthenticatedSheets();
     
     // Get the first sheet name
     const firstSheet = await getFirstSheet(SPREADSHEET_ID);
+    const dayLeftValue = await getValueByName(firstSheet, "Day Left", true);
+    dayLeft = typeof dayLeftValue === 'number' ? dayLeftValue : parseFloat(String(dayLeftValue || 0)) || 0;
     // Read columns C (name) and D (value) from the first sheet
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID!,
@@ -41,7 +45,8 @@ getHoangRemaining.get('/hoangRemaining', async (c) => {
       message: 'Retrieved Hoang remaining successfully',
       data: {
         atm: atm,
-        cash: cash
+        cash: cash,
+        dayLeft: dayLeft
       },
     };
     return c.json(res, 200);
