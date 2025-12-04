@@ -1,4 +1,3 @@
-import type { GenericResponseInterface } from '../models/GenericResponseInterface';
 import getAuthenticatedSheets from './getAuthenticatedSheets';
 
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
