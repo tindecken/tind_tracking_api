@@ -1,7 +1,6 @@
 import { Hono } from "hono";
 import { getTransactionColumn } from '../../utils/getTransactionColumn';
 import getAuthenticatedSheets from '../../utils/getAuthenticatedSheets';
-import getPerDay from '../../utils/getPerDay';
 import type { GenericResponseInterface } from '../../models/GenericResponseInterface';
 
 export const getAllTransactions = new Hono();
@@ -56,9 +55,6 @@ getAllTransactions.get('/allTransactions', async (c) => {
       return c.json(response, 404);
     }
 
-    // Get per day value
-    const perDay = await getPerDay();
-
     // Get all transactions in reverse order (most recent first)
     const allRows = transactionRows.slice().reverse();
     const transactions = allRows
@@ -72,12 +68,14 @@ getAllTransactions.get('/allTransactions', async (c) => {
         if (dateValue === null || dateValue === undefined || isNaN(Number(dateValue))) {
           return null;
         }
+        // Generate cell address for the date cell (e.g., "C5")
+        const cellAddress = `${transactionColumn}${rowIndex + 1}`;
         return {
+          cellAddress,
           date: dateValue,
           note: row[colIndex + 1] || '',
           price: row[colIndex + 2] || 0,
-          isCashed: row[colIndex + 3] === 'x',
-          perDay
+          isCashed: row[colIndex + 3] === 'x'
         };
       })
       .filter(transaction => transaction !== null);
