@@ -80,10 +80,19 @@ getAllTransactions.get('/allTransactions', async (c) => {
       })
       .filter(transaction => transaction !== null);
 
+    // Calculate total sum of all prices
+    const total = transactions.reduce((sum, transaction) => {
+      const price = typeof transaction.price === 'number' ? transaction.price : parseFloat(String(transaction.price)) || 0;
+      return sum + price;
+    }, 0);
+
     const res: GenericResponseInterface = {
       success: true,
       message: 'All transactions retrieved successfully',
-      data: transactions,
+      data: {
+        transactions,
+        total
+      },
     };
     return c.json(res, 200);
   } catch (error: any) {
