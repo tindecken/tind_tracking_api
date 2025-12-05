@@ -35,13 +35,29 @@ export async function getNhiRemaining(
     throw new Error(`Sheet "${sheetName}" is empty`);
   }
 
+  // Ensure values is a 2D array
+  if (!Array.isArray(values) || values.length === 0) {
+    throw new Error('No data found in the sheet');
+  }
+
   // Search for "N Remain" in the sheet
   let nhiRemainingRow = -1;
   let nhiRmainingCol = -1;
 
+  // Type guard to safely handle cell values
+  const getCellValue = (row: number, col: number): string => {
+    const rowData = values[row];
+    if (!Array.isArray(rowData)) return '';
+    const cell = rowData[col];
+    return cell ? String(cell).trim() : '';
+  };
+
   for (let row = 0; row < values.length; row++) {
-    for (let col = 0; col < values[row].length; col++) {
-      if (values[row][col]?.toString().trim() === 'N Remain') {
+    const currentRow = values[row];
+    if (!Array.isArray(currentRow)) continue;
+    
+    for (let col = 0; col < currentRow.length; col++) {
+      if (getCellValue(row, col) === 'N Remain') {
         nhiRemainingRow = row;
         nhiRmainingCol = col;
         break;
