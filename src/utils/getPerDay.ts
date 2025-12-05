@@ -21,18 +21,18 @@ export async function getPerDay(
   const sheets = await getAuthenticatedSheets();
   
   // Get the first sheet name
-  const sheetName = await getFirstSheet(spreadsheetId);
+  const firstSheet = await getFirstSheet(spreadsheetId);
 
   // Search for "Per Day" in the entire sheet
   const searchResponse = await sheets.spreadsheets.values.get({
     spreadsheetId,
-    range: sheetName,
+    range: firstSheet,
   });
 
   const values = searchResponse.data.values;
 
   if (!values || values.length === 0) {
-    throw new Error(`Sheet "${sheetName}" is empty`);
+    throw new Error(`Sheet "${firstSheet}" is empty`);
   }
 
   // Search for "Per Day" in the sheet
