@@ -56,12 +56,7 @@ getMustPay.get('/getMustPay', async (c) => {
       }
 
       const name = row[0].trim();
-      const amount = parseFloat(row[1]) || 0;
-      
-      // Skip if amount is 0 or invalid
-      if (amount <= 0) {
-        continue;
-      }
+      const amount = parseFloat(row[1]) || 0; 
 
       // Convert 0-based index to 1-based for cell reference
       const cellRef = getCellReference(i + 1, 0); // Column A (0) and current row
