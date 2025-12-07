@@ -14,7 +14,7 @@ export const addTransaction = new Hono();
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
 const transactionSheet = "T"
 
-const updateSchema = Type.Object({
+const schema = Type.Object({
   day: Type.Optional(Type.Union([Type.String(), Type.Null()])),
   note: Type.String({ maxLength: 255 }),
   price: Type.Number(),
@@ -22,7 +22,7 @@ const updateSchema = Type.Object({
   isPaybyCash: Type.Boolean(),
 
 })
-addTransaction.post('/addTransaction', tbValidator('json', updateSchema), async (c) => {
+addTransaction.post('/addTransaction', tbValidator('json', schema), async (c) => {
   try {
     const body = await c.req.json();
     let { day, note, price, isPaybyCash, isCountForNhi } = body;

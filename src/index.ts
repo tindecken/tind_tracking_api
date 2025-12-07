@@ -15,7 +15,7 @@ import { updateTransactionRoute } from "./routes/transactions/updateTransaction"
 import { getTransactionsRoute } from "./routes/transactions/getTransactions";
 import { getNhiSummary } from "./routes/transactions/getNhiSummary";
 import { reconcilliationTransactionRoute } from "./routes/transactions/reconcilliationTransaction";
-import { getAllTransactions, last5Transactions } from "./routes/spreadsheet/getAllTransactions";
+import { getAllTransactions } from "./routes/spreadsheet/getAllTransactions";
 import { lastTransaction } from "./routes/spreadsheet/lastTransaction";
 import { nhiRemaining } from "./routes/spreadsheet/nhiRemaining";
 import { addTransaction } from "./routes/spreadsheet/addTransaction";
@@ -24,6 +24,8 @@ import { undoTransaction } from "./routes/spreadsheet/undoTransaction";
 import { getMustPay } from "./routes/spreadsheet/getMustPay";
 import { getHoangRemaining } from "./routes/spreadsheet/getHoangRemaining";
 import { addTransactionForMustPay } from "./routes/spreadsheet/addTransactionForMustPay";
+import { cashWithdrawal } from "./routes/spreadsheet/cashWithdrawal";
+import { getNhiTransactions } from "./routes/spreadsheet/getNhiTransactions";
 
 const app = new Hono();
 
@@ -61,6 +63,9 @@ app.route("/spreadsheet", getHoangRemaining);
 app.route("/spreadsheet", perDay);
 app.route("/spreadsheet", undoTransaction);
 app.route("/spreadsheet", getMustPay);
+app.route("/spreadsheet", cashWithdrawal);
+app.route("/spreadsheet", getNhiTransactions);
+
 
 
 const port = Number(process.env.PORT!);
