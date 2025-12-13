@@ -26,6 +26,7 @@ import { getHoangRemaining } from "./routes/spreadsheet/getHoangRemaining";
 import { addTransactionForMustPay } from "./routes/spreadsheet/addTransactionForMustPay";
 import { cashWithdrawal } from "./routes/spreadsheet/cashWithdrawal";
 import { getNhiTransactions } from "./routes/spreadsheet/getNhiTransactions";
+import { updateIPAddress } from "./routes/cloudflare/updateIPAddress";
 
 const app = new Hono();
 
@@ -65,6 +66,7 @@ app.route("/spreadsheet", undoTransaction);
 app.route("/spreadsheet", getMustPay);
 app.route("/spreadsheet", cashWithdrawal);
 app.route("/spreadsheet", getNhiTransactions);
+app.route("/cloudflare", updateIPAddress);
 
 
 
