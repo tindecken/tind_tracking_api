@@ -3,14 +3,14 @@ import getAuthenticatedSheets from './getAuthenticatedSheets';
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
 
 if (!SPREADSHEET_ID) {
-    throw new Error('SPREADSHEET_ID environment variable is not defined');
+  throw new Error('SPREADSHEET_ID environment variable is not defined');
 }
 
 
 /**
  * Helper function to convert column index to letter (0 -> A, 1 -> B, etc.)
  */
-const columnToLetter = (column: number): string => {
+export const columnToLetter = (column: number): string => {
   let temp: number;
   let letter = '';
   while (column >= 0) {
@@ -34,7 +34,7 @@ export async function getTransactionColumn(
   searchValue: string = "Date",
   spreadsheetId: string = SPREADSHEET_ID!
 ): Promise<string> {
-  
+
   // Get authenticated sheets instance
   const sheets = await getAuthenticatedSheets();
 
@@ -45,7 +45,7 @@ export async function getTransactionColumn(
   });
 
   const rows = result.data.values;
-  
+
   if (!rows || rows.length === 0) {
     throw new Error(`Sheet "${sheetName}" is empty or not found`);
   }
@@ -61,7 +61,7 @@ export async function getTransactionColumn(
       // Convert cell value to string for comparison
       const cellValueStr = cellValue !== null && cellValue !== undefined ? String(cellValue).trim() : '';
       const searchValueStr = String(searchValue).trim();
-      
+
       if (cellValueStr === searchValueStr) {
         // Update lastColumnIndex if this column is further to the right
         if (colIndex > lastColumnIndex) {

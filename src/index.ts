@@ -26,16 +26,17 @@ import { getHoangRemaining } from "./routes/spreadsheet/getHoangRemaining";
 import { addTransactionForMustPay } from "./routes/spreadsheet/addTransactionForMustPay";
 import { cashWithdrawal } from "./routes/spreadsheet/cashWithdrawal";
 import { getNhiTransactions } from "./routes/spreadsheet/getNhiTransactions";
+import { reconcilliation } from "./routes/spreadsheet/reconcilliation";
 
 const app = new Hono();
 
 app.use("*", cors({
   origin: ['http://tindecken.xyz', 'https://tindecken.xyz', 'http://localhost', 'https://localhost:1000', 'http://localhost:1000', 'http://localhost:3001', 'https://paperwork.tindecken.xyz', 'https://paperworkapi.tindecken.xyz', 'https://192.168.1.99:9090', 'http://192.168.1.99:9090', 'capacitor://192.168.1.99:9090', 'capacitor://192.168.1.99', 'https://192.168.1.3:9090', 'https://192.168.1.3:1000', 'https://10.10.0.27:1000', 'https://10.10.0.27:3001', 'http://localhost:9000', 'https://d.tindecken.xyz'],
-	allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-	allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
-	credentials: true,
-	exposeHeaders: ['Content-Length', 'X-Kuma-Revision', 'X-Retry-After'],
-	maxAge: 10 * 60
+  allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
+  credentials: true,
+  exposeHeaders: ['Content-Length', 'X-Kuma-Revision', 'X-Retry-After'],
+  maxAge: 10 * 60
 }))
 
 app.get("/", (c) => c.text("✅ Tind Tracking API works"));
@@ -65,6 +66,7 @@ app.route("/spreadsheet", undoTransaction);
 app.route("/spreadsheet", getMustPay);
 app.route("/spreadsheet", cashWithdrawal);
 app.route("/spreadsheet", getNhiTransactions);
+app.route("/spreadsheet", reconcilliation);
 
 
 
