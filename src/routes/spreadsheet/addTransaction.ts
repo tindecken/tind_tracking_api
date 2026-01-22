@@ -51,39 +51,39 @@ addTransaction.post('/addTransaction', tbValidator('json', schema), async (c) =>
       requestBody: resource,
     });
     if (isCountForNhi) {
-        // TODO: Perform the update in First Sheet, Nhi
-        // Get the first sheet name
-        const fistSheeName = await getFirstSheet(SPREADSHEET_ID);
-        const NhiTransactionCell = await getFirstEmptyCellInColumn(fistSheeName, 'C7', SPREADSHEET_ID);
-        await sheets.spreadsheets.values.update({
-          spreadsheetId: SPREADSHEET_ID,
-          range: `${fistSheeName}!${NhiTransactionCell}`,
-          valueInputOption: "USER_ENTERED", // use RAW if you don't want Sheets to parse input
-          requestBody: { values: [[note, price, isPaybyCash ? "x" : ""]] },
-        });
-        // TODO: Perform the update in First Sheet, ta or tv column
-        let cell: string = ''
-        if (isPaybyCash) {
-          cell='D2'
-        } else {
-          cell='D1'
-        }
-        const currentCellRes = await sheets.spreadsheets.values.get({
-          spreadsheetId: SPREADSHEET_ID,
-          range: `${fistSheeName}!${cell}`,
-        });
-        const currentRaw = (currentCellRes.data.values && currentCellRes.data.values[0]
-          && currentCellRes.data.values[0][0]) ?? 0;
-        const current = Number(currentRaw) || 0;
-        const newValue = current + price;
-        await sheets.spreadsheets.values.update({
-          spreadsheetId: SPREADSHEET_ID,
-          range: `${fistSheeName}!${cell}`,
-          valueInputOption: "USER_ENTERED", // use RAW if you don't want Sheets to parse input
-          requestBody: { values: [[newValue]] },
-        });
+      // TODO: Perform the update in First Sheet, Nhi
+      // Get the first sheet name
+      const fistSheeName = await getFirstSheet(SPREADSHEET_ID);
+      const NhiTransactionCell = await getFirstEmptyCellInColumn(fistSheeName, 'C7', SPREADSHEET_ID);
+      await sheets.spreadsheets.values.update({
+        spreadsheetId: SPREADSHEET_ID,
+        range: `${fistSheeName}!${NhiTransactionCell}`,
+        valueInputOption: "USER_ENTERED", // use RAW if you don't want Sheets to parse input
+        requestBody: { values: [[note, price, isPaybyCash ? "x" : ""]] },
+      });
+      // TODO: Perform the update in First Sheet, ta or tv column
+      let cell: string = ''
+      if (isPaybyCash) {
+        cell = 'D2'
+      } else {
+        cell = 'D1'
+      }
+      const currentCellRes = await sheets.spreadsheets.values.get({
+        spreadsheetId: SPREADSHEET_ID,
+        range: `${fistSheeName}!${cell}`,
+      });
+      const currentRaw = (currentCellRes.data.values && currentCellRes.data.values[0]
+        && currentCellRes.data.values[0][0]) ?? 0;
+      const current = Number(currentRaw) || 0;
+      const newValue = current + price;
+      await sheets.spreadsheets.values.update({
+        spreadsheetId: SPREADSHEET_ID,
+        range: `${fistSheeName}!${cell}`,
+        valueInputOption: "USER_ENTERED", // use RAW if you don't want Sheets to parse input
+        requestBody: { values: [[newValue]] },
+      });
     }
-    
+
     // get updated per day value
     const perDayAfter = await getPerDay()
     const responseData = {
