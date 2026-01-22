@@ -62,12 +62,12 @@ giveNhi.post('/giveNhi', tbValidator('json', schema), async (c) => {
     let updatedTa = currentTa;
 
     if (isCash) {
-      // if input isCash = true, the value of "tv" should be: tv=current value - input amount
-      updatedTv = currentTv - amount;
+      // if input isCash = true, the value of "tv" should be: tv=current value + input amount
+      updatedTv = currentTv + amount;
       await updateValueByName(firstSheetName, "tv", updatedTv);
     } else {
-      // if input isCash = false, the value of "ta" should be: ta=current value - input amount
-      updatedTa = currentTa - amount;
+      // if input isCash = false, the value of "ta" should be: ta=current value + input amount
+      updatedTa = currentTa + amount;
       await updateValueByName(firstSheetName, "ta", updatedTa);
     }
 
