@@ -31,3 +31,7 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 
 # Finder (MacOS) folder config
 .DS_Store
+
+.env
+bun.lock
+feisty-reef-475204-c1-f080e333bb0e.json

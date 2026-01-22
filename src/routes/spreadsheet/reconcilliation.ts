@@ -46,22 +46,9 @@ reconcilliation.post('/reconcilliation', tbValidator('json', schema), async (c) 
     await updateValueByName(firstSheetName, "ta", taNewValue);
     await updateValueByName(firstSheetName, "tv", tvNewValue);
 
-    // We also update "atm" and "cash" labels to the new input values 
-    // to ensure subsequent reconciliations are calculated correctly.
-    await updateValueByName(firstSheetName, "atm", atm);
-    await updateValueByName(firstSheetName, "cash", cash);
-
     // get updated per day value
     const perDayAfter = await getPerDay()
     const responseData = {
-      taBefore: taCurrent,
-      taAfter: taNewValue,
-      tvBefore: tvCurrent,
-      tvAfter: tvNewValue,
-      atmBefore: atmCurrent,
-      atmAfter: atm,
-      cashBefore: cashCurrent,
-      cashAfter: cash,
       perDayAfter
     }
     const res: GenericResponseInterface = {
