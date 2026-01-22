@@ -17,6 +17,7 @@ const schema = Type.Object({
 })
 // ID of your target spreadsheet (the long ID from the URL)
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
+const transactionSheet = "T";
 
 giveNhi.post('/giveNhi', tbValidator('json', schema), async (c) => {
   try {
@@ -70,6 +71,19 @@ giveNhi.post('/giveNhi', tbValidator('json', schema), async (c) => {
       updatedTa = currentTa + amount;
       await updateValueByName(firstSheetName, "ta", updatedTa);
     }
+
+    // Add new Transaction in transaction sheet T
+    // day = today day, note = "dua Nhi", price = input amount, isPaybyCash = isCash ? "x" : ""
+    const transactionColumn = await getTransactionColumn(transactionSheet, "Date", SPREADSHEET_ID);
+    const transacitonCell = await getFirstEmptyCellInColumn(transactionSheet, `${transactionColumn}2`, SPREADSHEET_ID);
+    const todayDay = new Date().getDate();
+    const transactionValues = [[todayDay, "dua Nhi", amount, isCash ? "x" : ""]];
+    await sheets.spreadsheets.values.update({
+      spreadsheetId: SPREADSHEET_ID,
+      range: `${transactionSheet}!${transacitonCell}`,
+      valueInputOption: "USER_ENTERED",
+      requestBody: { values: transactionValues },
+    });
 
     const response: GenericResponseInterface = {
       success: true,
