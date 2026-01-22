@@ -27,6 +27,7 @@ import { addTransactionForMustPay } from "./routes/spreadsheet/addTransactionFor
 import { cashWithdrawal } from "./routes/spreadsheet/cashWithdrawal";
 import { getNhiTransactions } from "./routes/spreadsheet/getNhiTransactions";
 import { reconcilliation } from "./routes/spreadsheet/reconcilliation";
+import { giveNhi } from "./routes/spreadsheet/giveNhi";
 
 const app = new Hono();
 
@@ -67,6 +68,7 @@ app.route("/spreadsheet", getMustPay);
 app.route("/spreadsheet", cashWithdrawal);
 app.route("/spreadsheet", getNhiTransactions);
 app.route("/spreadsheet", reconcilliation);
+app.route("/spreadsheet", giveNhi);
 
 const port = Number(process.env.PORT!);
 
