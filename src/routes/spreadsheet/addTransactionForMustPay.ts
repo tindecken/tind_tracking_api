@@ -17,6 +17,7 @@ const transactionSheet = "T"
 const schema = Type.Object({
   day: Type.Optional(Type.Union([Type.String(), Type.Null()])),
   amount: Type.Number(),
+  note: Type.Optional(Type.String()),
   isPaybyCash: Type.Boolean(),
   mustPay: Type.Object({
     name: Type.String(),
@@ -28,7 +29,7 @@ const schema = Type.Object({
 addTransactionForMustPay.post('/addTransactionForMustPay', tbValidator('json', schema), async (c) => {
   try {
     const body = await c.req.json();
-    let { day, amount, isPaybyCash, mustPay } = body;
+    let { day, amount, isPaybyCash, mustPay, note } = body;
     const { name: mustPayName, amount: mustPayAmount, cell: mustPayCell } = mustPay;
 
     // Get authenticated sheets instance
@@ -52,7 +53,7 @@ addTransactionForMustPay.post('/addTransactionForMustPay', tbValidator('json', s
       range: `${transactionSheet}!${transactionCell}`,
       valueInputOption: "USER_ENTERED",
       requestBody: {
-        values: [[day, mustPayName, amount, isPaybyCash ? "x" : ""]]
+        values: [[day, `${mustPayName}${note ? ` - ${note}` : ""}`, amount, isPaybyCash ? "x" : ""]]
       },
     });
 
@@ -86,7 +87,7 @@ addTransactionForMustPay.post('/addTransactionForMustPay', tbValidator('json', s
         sheet: transactionSheet,
         cell: transactionCell,
         day,
-        note: mustPayName,
+        note: `${mustPayName}${note ? ` - ${note}` : ""}`,
         amount,
         isPaybyCash,
         perDayBefore,
