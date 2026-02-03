@@ -59,7 +59,7 @@ addTransaction.post('/addTransaction', tbValidator('json', schema), async (c) =>
         spreadsheetId: SPREADSHEET_ID,
         range: `${fistSheeName}!${NhiTransactionCell}`,
         valueInputOption: "USER_ENTERED", // use RAW if you don't want Sheets to parse input
-        requestBody: { values: [[note, price, isPaybyCash ? "x" : ""]] },
+        requestBody: { values: [[`[N] ${note}`, price, isPaybyCash ? "x" : ""]] },
       });
       // TODO: Perform the update in First Sheet, ta or tv column
       let cell: string = ''
