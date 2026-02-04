@@ -11,7 +11,6 @@ export const reconcilliation = new Hono();
 
 // ID of your target spreadsheet (the long ID from the URL)
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
-const transactionSheet = "T"
 
 const schema = Type.Object({
   atm: Type.Number(),

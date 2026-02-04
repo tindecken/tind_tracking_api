@@ -77,7 +77,7 @@ giveNhi.post('/giveNhi', tbValidator('json', schema), async (c) => {
     const transactionColumn = await getTransactionColumn(transactionSheet, "Date", SPREADSHEET_ID);
     const transacitonCell = await getFirstEmptyCellInColumn(transactionSheet, `${transactionColumn}2`, SPREADSHEET_ID);
     const todayDay = new Date().getDate();
-    const transactionValues = [[todayDay, "dua Nhi", amount, isCash ? "x" : ""]];
+    const transactionValues = [[todayDay, "[N] dua Nhi", amount, isCash ? "x" : ""]];
     await sheets.spreadsheets.values.update({
       spreadsheetId: SPREADSHEET_ID,
       range: `${transactionSheet}!${transacitonCell}`,
